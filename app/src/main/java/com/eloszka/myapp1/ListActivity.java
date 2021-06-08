@@ -1,9 +1,12 @@
-package com.eloszka;
+package com.eloszka.myapp1;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +37,23 @@ public class ListActivity extends AppCompatActivity {
         texts = new ArrayList<>();
         listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, texts);
         listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(ListActivity.this)
+                        .setTitle("Usunąć element?")
+                        .setMessage("Czy na pewno chcesz usunąć element?")
+                        .setPositiveButton("Usuń", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                texts.remove(position);
+                                Toast.makeText(getApplicationContext(), "Element został usunięty", Toast.LENGTH_LONG).show();
+                                listView.invalidateViews();
+                            }
+                });
+                adb.show();
+            }
+        });
     }
 
     public void addText(View v) {
